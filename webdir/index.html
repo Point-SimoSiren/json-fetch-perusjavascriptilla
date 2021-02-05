@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>node-palvelin</title>
+</head>
+
+<body>
+
+    <h1>Tämä on paikallinen express.js palvelimelta</h1>
+    <button onclick="haeHenkilot()">Hae henkilöt</button>
+
+    <div id="htmlTaulukko"></div>
+
+    <script>
+        //-----------palvelimelta-http-pyyntönä-----------------------
+        function haeHenkilot() {
+
+            var henkiloTable = `<table style="width: 900px">
+            <thead>
+                <tr>
+                    <th>Nimi</th>
+                    <th>Ikä</th>
+                </tr>
+            </thead>
+            <tbody>`
+
+            fetch('http://localhost:3001/henkilot')
+                .then(response => response.json())
+                .then(json => json.map(h =>
+                    henkiloTable += `<tr>
+                    <td>${h.nimi}</td>
+                    <td>${h.ikä}</td>
+                </tr>`
+                ))
+
+            // Palvelimen vastaus kestää muutaman millisekunnin ja siksi koodi ei toimi
+            // ellei odota hetken ennenkuin päättää taulukon:
+
+            setTimeout(() => {
+                henkiloTable += `</tbody></table>`
+                document.getElementById("htmlTaulukko").innerHTML = henkiloTable
+            }, 2000
+            )
+        }
+
+    </script>
+
+</body>
+
+
+</html>
